@@ -1,15 +1,8 @@
 <script setup>
     import { onMounted } from 'vue'
     import { useGeneralStore } from '../stores/generalStore.js'
-    import router from '../router/index.js'
 
     const generalStore = useGeneralStore();
-
-    onMounted(() => {
-      if (generalStore.isUserLoggedIn()) {
-          router.push('/main')
-      }
-    })
 </script> 
 
 <template>
@@ -28,7 +21,7 @@
                     <label for="floatingPassword">Password</label>
                 </div>
 
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <button class="w-100 btn btn-lg btn-primary" v-on:click="generalStore.login()">Sign in</button>
                 <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
             </form>
         </div>

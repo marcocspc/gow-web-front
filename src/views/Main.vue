@@ -1,19 +1,27 @@
 <script setup>
     import { ref } from 'vue'
+    import { onMounted } from 'vue'
     import { useGeneralStore } from '../stores/generalStore.js'
+    import AvailableApps from '../components/AvailableApps.vue'
+    import StackStatus from '../components/StackStatus.vue'
+
+    const AVAILABLE_APPS = 0
+    const STACK_STATUS = 1
 
     const generalStore = useGeneralStore();
-    const apps = ref(generalStore.apps)
+    const view = AVAILABLE_APPS
+
 </script> 
 
 <template>
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <div class="col-auto px-0">
-            <div id="sidebar" class="collapse collapse-horizontal show border-end">
+            <div id="sidebar" class="collapse collapse-horizontal border-end">
                 <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
-                    <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Available Apps</span> </a>
-                    <a href="#" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Stack Status</span> </a>
+                    <a href="#" v-on:click="view=AVAILABLE_APPS" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Available Apps</span> </a>
+                    <a href="#" v-on:click="view=STACK_STATUS" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Stack Status</span> </a>
+                    <a href="#" v-on:click="generalStore.logout()" class="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><span>Logout</span> </a>
                 </div>
             </div>
         </div>
@@ -22,24 +30,8 @@
             <div class="row">
                 <div class="col-12">
                     <!-- Content area... -->
-                    <h1>Available Apps</h1>
-                    <div class="tbl-container bdr"> <!-- <== overflow: hidden applied to parent -->
-                        <table class="table">
-                            <thead class="bg-red">
-                                <tr>
-                                    <th scope="col">Application Name</th>
-                                    <th scope="col">Application Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="app in apps">
-                                    <td>{{ app.name }}</td>
-                                    <td>{{ app.state }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
+                    <AvailableApps v-if="view==AVAILABLE_APPS" />
+                    <StackStatus v-if="view==STACK_STATUS" />
                 </div>
             </div>
         </main>
@@ -50,7 +42,6 @@
 
 <style>
 #app {
-    margin: auto;
     width: 100%;
 }
 
